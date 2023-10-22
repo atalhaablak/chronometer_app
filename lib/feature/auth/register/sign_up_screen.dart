@@ -6,6 +6,7 @@ import 'package:chronometer_app/core/ui/styles/app_colors.dart';
 import 'package:chronometer_app/core/ui/styles/app_text_styles.dart';
 import 'package:chronometer_app/core/ui/widget/text_form_field.dart';
 import 'package:chronometer_app/core/ui/widget/app_button.dart';
+import 'package:chronometer_app/core/ui/widget/we_are_improving_dialog.dart';
 import 'package:chronometer_app/feature/auth/register/viewmodel/sing_up_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -85,7 +86,7 @@ class SignUpScreen extends StatelessWidget {
       children: [
         AppButton(
           text: "Facebook",
-          onPressed: () {},
+          onPressed: () => showWeAreImprovingDialog(context),
           backgroundColor: const Color(0xFF3b5998),
           buttonWidth: 100.w,
         ),
@@ -97,7 +98,7 @@ class SignUpScreen extends StatelessWidget {
           width: 100.w,
           child: AppButton(
             text: "Google",
-            onPressed: () {},
+            onPressed: () => showWeAreImprovingDialog(context),
             backgroundColor: const Color.fromARGB(255, 133, 68, 207),
             buttonWidth: 100.w,
           ),
@@ -199,14 +200,14 @@ class SignUpScreen extends StatelessWidget {
         AppTextFormField(
           hintText: "******",
           labelText: "Parola",
-          obscureText: viewModel.showPassword,
+          obscureText: !viewModel.showPassword,
           controller: viewModel.passwordController,
           onChanged: (value) => viewModel.refreshView(),
           validator: (value) => value.isPassword() ? null : "Geçerli bir parola giriniz",
           maxLines: 1,
           suffixIcon: IconButton(
             icon: Icon(
-              viewModel.showPassword ? Icons.visibility : Icons.visibility_off,
+              viewModel.showPassword ? Icons.visibility_off : Icons.visibility,
               color: context.lightPurple,
             ),
             onPressed: () => viewModel.changePasswordVisibility(),
@@ -216,14 +217,14 @@ class SignUpScreen extends StatelessWidget {
         AppTextFormField(
           hintText: "******",
           labelText: "Parola",
-          obscureText: viewModel.showPasswordAgain,
+          obscureText: !viewModel.showPasswordAgain,
           controller: viewModel.passwordAgainController,
           onChanged: (value) => viewModel.refreshView(),
           validator: (value) => viewModel.isPasswordAgainValid ? null : "Parolalar eşleşmiyor",
           maxLines: 1,
           suffixIcon: IconButton(
             icon: Icon(
-              viewModel.showPassword ? Icons.visibility : Icons.visibility_off,
+              viewModel.showPasswordAgain ? Icons.visibility_off : Icons.visibility,
               color: context.lightPurple,
             ),
             onPressed: () => viewModel.changePasswordAgainVisibility(),

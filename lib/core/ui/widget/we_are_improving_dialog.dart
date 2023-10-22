@@ -1,3 +1,4 @@
+import 'package:chronometer_app/core/utils/route_manager/route_manager.dart';
 import 'package:flutter/material.dart';
 
 void showWeAreImprovingDialog(BuildContext context) {
@@ -17,7 +18,7 @@ class WeAreImprovingDialog extends StatelessWidget {
       content: const Text("Bu özellik geliştirme aşamasındadır. En kısa sürede kullanıma açılacaktır."),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Go.to.maybePop(),
           child: const Text("Tamam"),
         ),
       ],

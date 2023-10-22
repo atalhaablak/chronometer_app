@@ -6,7 +6,7 @@ class StopWatch extends BaseModelRepo<StopWatch> {
 
   late String? accountId;
   late String? name;
-  late int? totalDuration;
+  late Duration totalDuration;
   late int? lapCount;
   late DateTime? date;
   late List<LapDto>? lapList;
@@ -14,7 +14,7 @@ class StopWatch extends BaseModelRepo<StopWatch> {
   StopWatch.createStopWatch({
     required String this.accountId,
     required String this.name,
-    required int this.totalDuration,
+    required this.totalDuration,
     this.date,
     this.lapCount,
     this.lapList,
@@ -23,7 +23,7 @@ class StopWatch extends BaseModelRepo<StopWatch> {
   StopWatch.createStopWatchFromCollection(Map<String, dynamic> map) : super.initFromCollection(incomingMap: map) {
     accountId = map['accountId'];
     name = map['name'];
-    totalDuration = map['totalDuration'] as int;
+    totalDuration = Duration(seconds: map['totalDuration']);
     date = map['date'] != null ? DateTime.parse(map['date']) : null;
     lapCount = map['lapCount'];
     lapList = map["lapList"] != null ? List<LapDto>.from(map["lapList"]?.map((x) => LapDto.createLapDtoFromCollection(x))) : [];
@@ -34,7 +34,7 @@ class StopWatch extends BaseModelRepo<StopWatch> {
     Map<String, dynamic> map = super.toMap();
     map['accountId'] = accountId;
     map['name'] = name;
-    map['totalDuration'] = totalDuration;
+    map['totalDuration'] = totalDuration.inSeconds;
     map['date'] = date?.toIso8601String();
     map['lapCount'] = lapCount;
     map['lapList'] = lapList?.map((x) => x.toMap()).toList();

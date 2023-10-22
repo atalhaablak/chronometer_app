@@ -1,9 +1,11 @@
+import 'package:chronometer_app/core/error/failure.dart';
 import 'package:chronometer_app/core/extensions/string_extension.dart';
 import 'package:chronometer_app/core/init/locator.dart';
 import 'package:chronometer_app/core/keys/global_key.dart';
 import 'package:chronometer_app/core/utils/remote_data_source/https/_https_exports.dart';
+import 'package:chronometer_app/core/utils/route.dart';
+import 'package:chronometer_app/core/utils/route_manager/route_manager.dart';
 import 'package:chronometer_app/core/viewmodel/base_view_model.dart';
-import 'package:chronometer_app/feature/splash/splash_screen.dart';
 import 'package:chronometer_app/feature/timer/data/stopwatch.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +32,8 @@ class HistoryViewmodel extends BaseViewModel {
         ],
       );
       historyList = response.fold((l) => [], (r) => r);
-    } on Exception catch (e) {
-      print(e);
+    } on Failure catch (e) {
+      showAboutDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [Text(e.errorMessage.getValueOrDefault)]);
     }
 
     isLoading = false;
@@ -45,9 +47,10 @@ class HistoryViewmodel extends BaseViewModel {
         throw Exception();
       } else {
         historyList!.remove(historyListItem);
+        Go.to.maybePop();
       }
-    } catch (e) {
-      print(e);
+    } on Failure catch (e) {
+      showAboutDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [Text(e.errorMessage.getValueOrDefault)]);
     }
     refreshView();
   }
@@ -62,8 +65,8 @@ class HistoryViewmodel extends BaseViewModel {
         }
       });
       historyList!.clear();
-    } catch (e) {
-      print(e);
+    } on Failure catch (e) {
+      showAboutDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [Text(e.errorMessage.getValueOrDefault)]);
     }
     isLoading = false;
     refreshView();
@@ -72,10 +75,13 @@ class HistoryViewmodel extends BaseViewModel {
   Future<void> logOut() async {
     await _firebaseAuth.signOut();
 
-    Navigator.pushAndRemoveUntil(
-      GlobalContextKey.instance.currentNavigatorKey.currentContext!,
-      MaterialPageRoute(builder: (context) => const SplashScreen()),
-      (route) => route.isFirst,
+    Go.to.pageAndRemoveUntil(
+      logInPageRoute,
+      predicate: (route) => route.isFirst,
     );
+  }
+
+  void naviateToTimerScreen() {
+    Go.to.page(timerPageRoute);
   }
 }

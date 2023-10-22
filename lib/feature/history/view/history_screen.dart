@@ -3,9 +3,9 @@ import 'package:chronometer_app/core/extensions/num_extension.dart';
 import 'package:chronometer_app/core/functions/r_edge_instets.dart';
 import 'package:chronometer_app/core/ui/styles/app_colors.dart';
 import 'package:chronometer_app/core/ui/styles/app_text_styles.dart';
+import 'package:chronometer_app/core/utils/route_manager/route_manager.dart';
 import 'package:chronometer_app/feature/history/viewmodel/history_view_model.dart';
 import 'package:chronometer_app/feature/history/widget/history_list_item_widget.dart';
-import 'package:chronometer_app/feature/timer/timer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,9 +25,7 @@ class HistoryScreen extends StatelessWidget {
                     _buildAppBarActions(context, viewmodel),
                     IconButton(
                       icon: const Icon(Icons.timer),
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const TimerScreen()));
-                      },
+                      onPressed: () => viewmodel.naviateToTimerScreen(),
                     ),
                   ],
                   leading: IconButton(
@@ -35,9 +33,7 @@ class HistoryScreen extends StatelessWidget {
                       quarterTurns: 2,
                       child: Icon(Icons.logout_outlined),
                     ),
-                    onPressed: () {
-                      viewmodel.logOut();
-                    },
+                    onPressed: () => viewmodel.logOut(),
                   )),
               body: RefreshIndicator(
                 onRefresh: () async {
@@ -76,9 +72,7 @@ class HistoryScreen extends StatelessWidget {
         ),
         SizedBox(height: 20.h),
         InkWell(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const TimerScreen()));
-          },
+          onTap: () => viewmodel.naviateToTimerScreen(),
           child: Text(
             "Şimdi Başla!",
             style: context.px16w400.copyWith(color: context.lightPurple, decoration: TextDecoration.underline),
@@ -108,16 +102,11 @@ class HistoryScreen extends StatelessWidget {
               content: const Text("Tüm kayıtları silmek istediğinize emin misiniz?"),
               actions: [
                 TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  onPressed: () => Go.to.maybePop(),
                   child: const Text("İptal"),
                 ),
                 TextButton(
-                  onPressed: () async {
-                    await viewmodel.removeAllCard();
-                    Navigator.pop(context);
-                  },
+                  onPressed: () async => await viewmodel.removeAllCard(),
                   child: const Text("Sil"),
                 ),
               ],
