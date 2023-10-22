@@ -9,7 +9,6 @@ import 'package:chronometer_app/core/ui/styles/app_styles.dart';
 import 'package:chronometer_app/core/ui/styles/app_text_styles.dart';
 import 'package:chronometer_app/core/utils/route.dart';
 import 'package:chronometer_app/core/utils/route_manager/route_manager.dart';
-import 'package:chronometer_app/feature/history/view/history_detail_screen.dart';
 import 'package:chronometer_app/feature/history/viewmodel/history_view_model.dart';
 import 'package:chronometer_app/feature/timer/data/stopwatch.dart';
 import 'package:flutter/material.dart';
@@ -96,7 +95,6 @@ class HistoryListItemWidget extends StatelessWidget {
             child: Center(
               child: InkWell(
                 onTap: () => Go.to.page(historyDetailPageRoute, argument: historyListItem.documentID),
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryDetailScreen(historyItemId: historyListItem.documentID))),
                 child: Icon(
                   Icons.arrow_forward_ios_outlined,
                   color: context.white,
@@ -135,16 +133,11 @@ class HistoryListItemWidget extends StatelessWidget {
           content: const Text("Kaydı silmek istediğinize emin misiniz?"),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
+              onPressed: () => Go.to.maybePop(),
               child: const Text("İptal"),
             ),
             TextButton(
-              onPressed: () async {
-                await viewmodel.removeCard(historyListItem);
-                Navigator.pop(context, true);
-              },
+              onPressed: () async => await viewmodel.removeCard(historyListItem),
               child: const Text("Sil"),
             ),
           ],
