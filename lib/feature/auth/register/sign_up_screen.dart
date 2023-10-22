@@ -114,7 +114,6 @@ class SignUpScreen extends StatelessWidget {
           child: AppTextFormField(
             hintText: "Adınız",
             labelText: "Ad",
-            obscureText: viewmodel.showPassword,
             controller: viewmodel.nameController,
             onChanged: (value) => viewmodel.refreshView(),
             validator: (value) => value.isName() ? null : "Geçerli bir ad giriniz",
@@ -127,7 +126,6 @@ class SignUpScreen extends StatelessWidget {
             child: AppTextFormField(
               hintText: "Soyadınız",
               labelText: "Soyad",
-              obscureText: viewmodel.showPassword,
               controller: viewmodel.surnameController,
               onChanged: (value) => viewmodel.refreshView(),
               validator: (value) => value.isName() ? null : "Geçerli bir soyad giriniz",
@@ -241,7 +239,7 @@ class SignUpScreen extends StatelessWidget {
       height: 50.h,
       child: AppButton(
         text: "Kayıt Ol",
-        onPressed: () => viewModel.signUpWithEmailAndPassword(viewModel.emailController.text, viewModel.passwordController.text),
+        onPressed: () => viewModel.signUpWithEmailAndPassword(),
         backgroundColor: viewModel.isFormValid ? context.deepPurple : context.lightPurple,
       ),
     );

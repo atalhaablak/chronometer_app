@@ -3,13 +3,13 @@ import 'package:chronometer_app/core/extensions/list_extension.dart';
 import 'package:chronometer_app/core/extensions/num_extension.dart';
 import 'package:chronometer_app/core/extensions/string_extension.dart';
 import 'package:chronometer_app/core/ui/styles/app_text_styles.dart';
-import 'package:chronometer_app/feature/history/dto/history_detail_dto.dart';
 import 'package:chronometer_app/feature/history/viewmodel/history_detail_view_model.dart';
+import 'package:chronometer_app/feature/timer/data/stopwatch.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HistoryDetailScreen extends StatelessWidget {
-  final int historyItemId;
+  final String historyItemId;
   const HistoryDetailScreen({super.key, required this.historyItemId});
 
   @override
@@ -23,7 +23,7 @@ class HistoryDetailScreen extends StatelessWidget {
               appBar: AppBar(
                 title: Text("Detay", style: context.px24w400.copyWith(color: Colors.white)),
                 actions: [
-                  _buildDeleteButton(context),
+                  viewModel.isLoading ? const SizedBox.shrink() : _buildDeleteButton(context, viewModel, viewModel.historyDetailDto!),
                 ],
               ),
               body: Padding(
@@ -51,7 +51,7 @@ class HistoryDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDeleteButton(BuildContext context) {
+  Widget _buildDeleteButton(BuildContext context, HistoryDetailViewModel viewmodel, StopWatch historyListItem) {
     return IconButton(
       icon: const Icon(Icons.delete_outline_outlined),
       onPressed: () {
@@ -70,6 +70,7 @@ class HistoryDetailScreen extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
+                    viewmodel.removeCard(historyListItem);
                     Navigator.pop(context);
                   },
                   child: const Text("Sil"),
@@ -82,7 +83,7 @@ class HistoryDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHistoryDetail(BuildContext context, HistoryDetailDto? historyDetailDto) {
+  Widget _buildHistoryDetail(BuildContext context, StopWatch? historyDetailDto) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -93,7 +94,7 @@ class HistoryDetailScreen extends StatelessWidget {
         ),
         SizedBox(height: 5.h),
         Text(
-          (historyDetailDto?.totalDuration).getValueOrDefault,
+          (historyDetailDto?.totalDuration).getDurationInHHMMSS,
           style: context.px16w600,
         ),
         SizedBox(height: 20.h),
@@ -103,7 +104,7 @@ class HistoryDetailScreen extends StatelessWidget {
         ),
         SizedBox(height: 5.h),
         Text(
-          ((historyDetailDto?.totalCount).getValueOrDefault).toString(),
+          ((historyDetailDto?.lapCount).getValueOrDefault).toString(),
           style: context.px16w600,
         ),
         SizedBox(height: 20.h),
@@ -120,7 +121,7 @@ class HistoryDetailScreen extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 separatorBuilder: (context, index) => SizedBox(height: 10.h),
                 itemBuilder: (context, index) => Text(
-                  "#$index - ${(historyDetailDto?.lapList).getValueOrDefault[index].lapDuration}",
+                  "#$index - ${(historyDetailDto?.lapList).getValueOrDefault[index].lapDuration.getDurationInHHMMSS}",
                   style: context.px16w400,
                 ),
               ),

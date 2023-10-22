@@ -11,10 +11,7 @@ class SetNameTimeDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<TimerViewModel>.value(
-      value: TimerViewModel(),
-      builder: (context, child) => _buildDialog(),
-    );
+    return _buildDialog();
   }
 
   Widget _buildDialog() {
@@ -60,7 +57,7 @@ class SetNameTimeDialog extends StatelessWidget {
       children: [
         AppButton(
           text: "Kaydet",
-          onPressed: viewModel.saveTime,
+          onPressed: () => viewModel.saveTime(context),
           backgroundColor: viewModel.isActiveSaveNameButton ? context.deepPurple : context.lightPurple,
         ),
       ],

@@ -1,17 +1,31 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:chronometer_app/core/utils/remote_data_source/https/_https_exports.dart';
 
-part 'lap_dto.g.dart';
+class LapDto extends BaseModelRepo<LapDto> {
+  String? lapNumber;
+  int? lapDuration;
 
-@JsonSerializable()
-class LapDto {
-  @JsonKey(defaultValue: "")
-  final String? lapNumber;
-  @JsonKey(defaultValue: "")
-  final String? lapDuration;
+  LapDto.createLapDto({
+    required String this.lapNumber,
+    required int this.lapDuration,
+  }) : super.init();
 
-  LapDto({required this.lapNumber, required this.lapDuration});
+  LapDto.createEmptyLapDto() : super.init();
 
-  factory LapDto.fromJson(Map<String, dynamic> json) => _$LapDtoFromJson(json);
+  LapDto.createLapDtoFromCollection(Map<String, dynamic> map) : super.initFromCollection(incomingMap: map) {
+    lapNumber = map['lapNumber'];
+    lapDuration = map['lapDuration'];
+  }
 
-  Map<String, dynamic> toJson() => _$LapDtoToJson(this);
+  @override
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = super.toMap();
+    map['lapNumber'] = lapNumber;
+    map['lapDuration'] = lapDuration;
+    return map;
+  }
+
+  @override
+  LapDto fromMap(Map<String, dynamic> map, {List<String>? innerDocIds}) {
+    return LapDto.createLapDtoFromCollection(map);
+  }
 }

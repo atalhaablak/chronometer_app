@@ -1,38 +1,44 @@
+import 'package:chronometer_app/core/init/locator.dart';
+import 'package:chronometer_app/core/utils/remote_data_source/https/domain/entities/querys.dart';
+import 'package:chronometer_app/core/utils/remote_data_source/https/domain/repo/base_request_repository.dart';
 import 'package:chronometer_app/core/viewmodel/base_view_model.dart';
-import 'package:chronometer_app/feature/history/dto/history_detail_dto.dart';
-import 'package:chronometer_app/feature/history/dto/lap_dto.dart';
+import 'package:chronometer_app/feature/timer/data/stopwatch.dart';
 
 class HistoryDetailViewModel extends BaseViewModel {
-  final int historyItemId;
+  final String historyItemId;
   HistoryDetailViewModel({required this.historyItemId}) {
     getDetail();
   }
 
-  HistoryDetailDto? historyDetailDto;
+  StopWatch? historyDetailDto;
 
   Future<void> getDetail() async {
     isLoading = true;
-    historyDetailDto = HistoryDetailDto(
-      name: "Sabah Koşusu",
-      totalCount: 3,
-      totalDuration: "01:30:24",
-      lapList: [
-        LapDto(
-          lapNumber: "1",
-          lapDuration: "00:30:24",
+
+    try {
+      var response = await getIt<BaseRequestRepository>().fetch<StopWatch>(querys: [
+        Querys.where(
+          filteringField: "documentId",
+          filterType: WhereType.IS_EQUAL,
+          filterValue: historyItemId,
         ),
-        LapDto(
-          lapNumber: "2",
-          lapDuration: "00:30:24",
-        ),
-        LapDto(
-          lapNumber: "3",
-          lapDuration: "00:30:24",
-        ),
-      ],
-    );
-    await Future.delayed(const Duration(seconds: 1)); // TODO: Kaldırılacak
+      ]);
+      historyDetailDto = response.fold((l) => null, (r) => r.first);
+    } catch (e) {
+      print(e);
+    }
+
     isLoading = false;
+    refreshView();
+  }
+
+  Future<void> removeCard(StopWatch historyListItem) async {
+    try {
+      var response = await getIt<BaseRequestRepository>().delete(deletedData: historyListItem);
+      if (response.isLeft()) {
+        throw Exception();
+      }
+    } catch (e) {}
     refreshView();
   }
 }

@@ -9,7 +9,6 @@ import 'package:chronometer_app/core/ui/widget/app_button.dart';
 import 'package:chronometer_app/core/ui/widget/we_are_improving_dialog.dart';
 import 'package:chronometer_app/feature/auth/login/viewmodel/login_view_model.dart';
 import 'package:chronometer_app/feature/auth/register/sign_up_screen.dart';
-import 'package:chronometer_app/feature/history/view/history_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -155,9 +154,7 @@ class LogInScreen extends StatelessWidget {
       height: 50.h,
       child: AppButton(
         text: "Giriş Yap",
-        onPressed: () {
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HistoryScreen()), (route) => false);
-        },
+        onPressed: () => viewModel.signIn(),
         backgroundColor: viewModel.isFormValid ? context.deepPurple : context.lightPurple,
       ),
     );
