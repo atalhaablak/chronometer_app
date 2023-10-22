@@ -1,14 +1,18 @@
 import 'package:chronometer_app/core/extensions/num_extension.dart';
+import 'package:chronometer_app/core/extensions/string_extension.dart';
 import 'package:chronometer_app/core/functions/r_edge_instets.dart';
 import 'package:chronometer_app/core/ui/styles/app_colors.dart';
 import 'package:chronometer_app/core/ui/styles/app_styles.dart';
 import 'package:chronometer_app/core/ui/styles/app_text_styles.dart';
+import 'package:chronometer_app/feature/history/dto/history_list_model.dart';
 import 'package:chronometer_app/feature/history/view/history_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class HistoryListItemWidget extends StatelessWidget {
+  final HistoryListDto historyListItem;
   const HistoryListItemWidget({
     super.key,
+    required this.historyListItem,
   });
 
   @override
@@ -32,7 +36,7 @@ class HistoryListItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "Kayıt İsmi",
+                  historyListItem.name.getValueOrDefault,
                   style: context.px16w400,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -55,22 +59,22 @@ class HistoryListItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "23.04.2024",
+                  historyListItem.date ?? "--/--/--",
                   style: context.px16w400,
                 ),
                 Text(
-                  "00:00:00",
+                  historyListItem.totalDuration.getValueOrDefault,
                   style: context.px16w400,
                 ),
                 Text(
-                  "0",
+                  historyListItem.lapCount.getValueOrDefault,
                   style: context.px16w400,
                 ),
               ],
             ),
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const HistoryDetailScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryDetailScreen(historyItemId: historyListItem.id)));
               },
               child: Icon(
                 Icons.arrow_forward_ios,
