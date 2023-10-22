@@ -87,27 +87,6 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAuthenticationButton(BuildContext context, String imagePath, VoidCallback onPressed) {
-    return InkWell(
-      onTap: onPressed,
-      child: Container(
-        width: 40.w,
-        height: 40.w,
-        decoration: BoxDecoration(
-          color: context.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(6.r),
-          ),
-        ),
-        child: Image.asset(
-          imagePath,
-          width: 20.w,
-          height: 20.w,
-        ),
-      ),
-    );
-  }
-
   Widget _buildSignUpButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -116,18 +95,6 @@ class SignUpScreen extends StatelessWidget {
         text: "Kayıt Ol",
         onPressed: () {},
         backgroundColor: context.lightPurple, // context.deepPurple
-      ),
-    );
-  }
-
-  SizedBox _buildLogInButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 50.h,
-      child: AppButton(
-        text: "Giriş Yap",
-        onPressed: () {},
-        backgroundColor: context.deepPurple,
       ),
     );
   }
