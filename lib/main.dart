@@ -1,14 +1,26 @@
+import 'package:chronometer_app/core/init/locator.dart';
 import 'package:chronometer_app/core/keys/global_key.dart';
 import 'package:chronometer_app/core/utils/screen_size.dart';
-import 'package:chronometer_app/feature/history/history_screen.dart';
+import 'package:chronometer_app/feature/history/view/history_screen.dart';
+import 'package:chronometer_app/feature/history/viewmodel/history_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'core/utils/router.dart' as router;
+import 'package:provider/provider.dart';
 
-void main() => runApp(const IdeApp());
+void main() {
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<HistoryViewmodel>(create: (context) => getIt()),
+      ],
+      child: const ChronometerApp(),
+    ),
+  );
+}
 
-class IdeApp extends StatelessWidget {
-  const IdeApp({super.key});
+class ChronometerApp extends StatelessWidget {
+  const ChronometerApp({super.key});
 
   @override
   Widget build(BuildContext context) {
