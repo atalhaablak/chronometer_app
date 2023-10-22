@@ -1,3 +1,4 @@
+import 'package:chronometer_app/core/extensions/int_extension.dart';
 import 'package:chronometer_app/core/extensions/list_extension.dart';
 import 'package:chronometer_app/core/extensions/num_extension.dart';
 import 'package:chronometer_app/core/extensions/string_extension.dart';
@@ -13,37 +14,34 @@ class TimerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<TimerViewModel>(
-      create: (context) => TimerViewModel(),
-      child: Consumer<TimerViewModel>(
-        builder: (context, viewModel, child) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text("Kronometre"),
-            ),
-            body: Padding(
-              padding: const EdgeInsets.all(20),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Kronometre",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 20.h),
-                    _buildTimer(context, viewModel),
-                    SizedBox(height: 20.h),
-                    _buildTimerButtons(context, viewModel),
-                    SizedBox(height: 20.h),
-                    _buildLapList(context, viewModel),
-                  ],
-                ),
+    return Consumer<TimerViewModel>(
+      builder: (context, viewModel, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text("Kronometre"),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(20),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Kronometre",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 20.h),
+                  _buildTimer(context, viewModel),
+                  SizedBox(height: 20.h),
+                  _buildTimerButtons(context, viewModel),
+                  SizedBox(height: 20.h),
+                  _buildLapList(context, viewModel),
+                ],
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -119,7 +117,7 @@ class TimerScreen extends StatelessWidget {
                       style: context.px16w400,
                     ),
                     trailing: Text(
-                      viewModel.lapList[index].lapDuration.getValueOrDefault,
+                      viewModel.lapList[index].lapDuration.getDurationInHHMMSS,
                       style: context.px16w400,
                     ),
                   );
