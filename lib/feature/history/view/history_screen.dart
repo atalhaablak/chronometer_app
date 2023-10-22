@@ -31,9 +31,9 @@ class HistoryScreen extends StatelessWidget {
                     ),
                   ],
                   leading: IconButton(
-                    icon: RotatedBox(
+                    icon: const RotatedBox(
                       quarterTurns: 2,
-                      child: const Icon(Icons.logout_outlined),
+                      child: Icon(Icons.logout_outlined),
                     ),
                     onPressed: () {
                       viewmodel.logOut();

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class SignUpViewModel extends BaseViewModel {
+  @override
   Future<void> init() async {}
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;

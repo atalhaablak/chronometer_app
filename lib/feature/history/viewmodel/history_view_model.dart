@@ -2,9 +2,7 @@ import 'package:chronometer_app/core/extensions/string_extension.dart';
 import 'package:chronometer_app/core/init/locator.dart';
 import 'package:chronometer_app/core/keys/global_key.dart';
 import 'package:chronometer_app/core/utils/remote_data_source/https/_https_exports.dart';
-import 'package:chronometer_app/core/utils/remote_data_source/https/domain/repo/base_request_repository.dart';
 import 'package:chronometer_app/core/viewmodel/base_view_model.dart';
-import 'package:chronometer_app/feature/auth/login/log_in_screen.dart';
 import 'package:chronometer_app/feature/splash/splash_screen.dart';
 import 'package:chronometer_app/feature/timer/data/stopwatch.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +13,7 @@ class HistoryViewmodel extends BaseViewModel {
     getHistory();
   }
 
-  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   List<StopWatch>? historyList;
 
   Future<void> getHistory() async {

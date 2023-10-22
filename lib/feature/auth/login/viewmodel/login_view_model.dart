@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginViewModel extends BaseViewModel {
+  @override
   Future<void> init() async {}
 
   TextEditingController emailController = TextEditingController();
@@ -16,7 +17,7 @@ class LoginViewModel extends BaseViewModel {
   bool get isFormValid => isEmail && isPassword;
   bool showPassword = false;
 
-  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Future<void> loginWithEmailAndPassword(String email, String password) async {
     isLoading = true;
@@ -32,7 +33,7 @@ class LoginViewModel extends BaseViewModel {
         Navigator.pushAndRemoveUntil(GlobalContextKey.instance.currentNavigatorKey.currentContext!,
             MaterialPageRoute(builder: (context) => const HistoryScreen()), (route) => false);
       }
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       showAboutDialog(
           context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [const Text("Lütfen Bilgilerinizi Kontrol Ediniz.")]);
     }
