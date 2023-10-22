@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'package:chronometer_app/core/error/failure.dart';
 import 'package:chronometer_app/core/extensions/string_extension.dart';
 import 'package:chronometer_app/core/init/locator.dart';
 import 'package:chronometer_app/core/utils/remote_data_source/https/_https_exports.dart';
+import 'package:chronometer_app/core/utils/route.dart';
+import 'package:chronometer_app/core/utils/route_manager/route_manager.dart';
 import 'package:chronometer_app/core/viewmodel/base_view_model.dart';
 import 'package:chronometer_app/feature/history/dto/lap_dto.dart';
-import 'package:chronometer_app/feature/history/view/history_screen.dart';
 import 'package:chronometer_app/feature/timer/data/stopwatch.dart';
 import 'package:chronometer_app/feature/timer/widget/save_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -76,11 +78,11 @@ class TimerViewModel extends BaseViewModel {
         response.then((value) async {
           if (value.isRight()) {
             resetTimer();
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HistoryScreen()), (route) => route.isFirst);
+            Go.to.pageAndRemoveUntil(historyPageRoute, predicate: (route) => route.isFirst);
           }
         });
-      } on Exception catch (e) {
-        print(e);
+      } on Failure catch (e) {
+        showAboutDialog(context: context, children: [Text(e.errorMessage.getValueOrDefault)]);
       }
     }
   }

@@ -8,7 +8,6 @@ import 'package:chronometer_app/core/ui/widget/text_form_field.dart';
 import 'package:chronometer_app/core/ui/widget/app_button.dart';
 import 'package:chronometer_app/core/ui/widget/we_are_improving_dialog.dart';
 import 'package:chronometer_app/feature/auth/login/viewmodel/login_view_model.dart';
-import 'package:chronometer_app/feature/auth/register/sign_up_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -53,7 +52,7 @@ class LogInScreen extends StatelessWidget {
                     SizedBox(height: 40.h),
                     _buildLogInButton(context, viewModel),
                     _buildDivider(context),
-                    _buildSignUpButton(context),
+                    _buildSignUpButton(context, viewModel),
                   ],
                 ),
               ),
@@ -115,14 +114,14 @@ class LogInScreen extends StatelessWidget {
     return AppTextFormField(
       hintText: "******",
       labelText: "Parola",
-      obscureText: viewModel.showPassword,
+      obscureText: !viewModel.showPassword,
       controller: viewModel.passwordController,
       onChanged: (value) => viewModel.passwordFieldChanged(value),
       validator: (value) => value.isPassword() ? null : "Geçerli bir parola giriniz",
       maxLines: 1,
       suffixIcon: IconButton(
         icon: Icon(
-          viewModel.showPassword ? Icons.visibility : Icons.visibility_off,
+          viewModel.showPassword ? Icons.visibility_off : Icons.visibility,
           color: context.lightPurple,
         ),
         onPressed: () => viewModel.changePasswordVisibility(),
@@ -137,7 +136,7 @@ class LogInScreen extends StatelessWidget {
         Padding(
           padding: REdgeInsets.only(top: 5),
           child: InkWell(
-            onTap: () => showWeAreImprovingDialog(context), // TODO: Forgot password screen
+            onTap: () => showWeAreImprovingDialog(context),
             child: Text(
               "Şifremi unuttum",
               style: context.px11w400.copyWith(decoration: TextDecoration.underline),
@@ -189,7 +188,7 @@ class LogInScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSignUpButton(BuildContext context) {
+  Widget _buildSignUpButton(BuildContext context, LoginViewModel viewModel) {
     return Center(
       child: RichText(
         text: TextSpan(
@@ -199,10 +198,7 @@ class LogInScreen extends StatelessWidget {
             TextSpan(
               text: "Kayıt Ol",
               style: context.px14w600.copyWith(decoration: TextDecoration.underline),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen()));
-                },
+              recognizer: TapGestureRecognizer()..onTap = () => viewModel.navigateToSignUpScreen(context),
             ),
           ],
         ),

@@ -4,6 +4,7 @@ import 'package:chronometer_app/core/extensions/list_extension.dart';
 import 'package:chronometer_app/core/extensions/num_extension.dart';
 import 'package:chronometer_app/core/extensions/string_extension.dart';
 import 'package:chronometer_app/core/ui/styles/app_text_styles.dart';
+import 'package:chronometer_app/core/utils/route_manager/route_manager.dart';
 import 'package:chronometer_app/feature/history/viewmodel/history_detail_view_model.dart';
 import 'package:chronometer_app/feature/timer/data/stopwatch.dart';
 import 'package:flutter/material.dart';
@@ -64,16 +65,11 @@ class HistoryDetailScreen extends StatelessWidget {
               content: const Text("Kaydı silmek istediğinize emin misiniz?"),
               actions: [
                 TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  onPressed: () => Go.to.maybePop(),
                   child: const Text("İptal"),
                 ),
                 TextButton(
-                  onPressed: () {
-                    viewmodel.removeCard(historyListItem);
-                    Navigator.pop(context);
-                  },
+                  onPressed: () => viewmodel.removeCard(historyListItem),
                   child: const Text("Sil"),
                 ),
               ],

@@ -1,7 +1,8 @@
 import 'package:chronometer_app/core/extensions/string_extension.dart';
 import 'package:chronometer_app/core/keys/global_key.dart';
+import 'package:chronometer_app/core/utils/route.dart';
+import 'package:chronometer_app/core/utils/route_manager/route_manager.dart';
 import 'package:chronometer_app/core/viewmodel/base_view_model.dart';
-import 'package:chronometer_app/feature/history/view/history_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -26,18 +27,19 @@ class LoginViewModel extends BaseViewModel {
   }
 
   Future<void> signIn() async {
-    isLoading = true;
-    try {
-      final UserCredential userCredential =
-          await _firebaseAuth.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-      if (userCredential.user != null) {
-        Navigator.pushAndRemoveUntil(GlobalContextKey.instance.currentNavigatorKey.currentContext!,
-            MaterialPageRoute(builder: (context) => const HistoryScreen()), (route) => false);
+    if (isFormValid) {
+      isLoading = true;
+      try {
+        final UserCredential userCredential =
+            await _firebaseAuth.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+        if (userCredential.user != null) {
+          Go.to.pageAndRemoveUntil(historyPageRoute);
+        }
+      } on FirebaseAuthException catch (e) {
+        showAboutDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [Text(e.code)]);
       }
-    } on FirebaseAuthException catch (e) {
-      showAboutDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [Text(e.code)]);
+      isLoading = false;
     }
-    isLoading = false;
   }
 
   Future<void> loginWithGoogle() async {
@@ -61,5 +63,9 @@ class LoginViewModel extends BaseViewModel {
 
   void passwordFieldChanged(String? value) {
     refreshView();
+  }
+
+  void navigateToSignUpScreen(BuildContext context) {
+    Go.to.page(signUpPageRoute);
   }
 }
