@@ -1,3 +1,4 @@
+import 'package:chronometer_app/core/extensions/duration_extension.dart';
 import 'package:chronometer_app/core/extensions/int_extension.dart';
 import 'package:chronometer_app/core/extensions/list_extension.dart';
 import 'package:chronometer_app/core/extensions/num_extension.dart';
@@ -94,7 +95,7 @@ class HistoryDetailScreen extends StatelessWidget {
         ),
         SizedBox(height: 5.h),
         Text(
-          (historyDetailDto?.totalDuration).getDurationInHHMMSS,
+          historyDetailDto?.totalDuration.getDurationInHHMMSS ?? "--:--:--",
           style: context.px16w600,
         ),
         SizedBox(height: 20.h),

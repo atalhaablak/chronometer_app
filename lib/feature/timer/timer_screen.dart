@@ -57,7 +57,7 @@ class TimerScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            viewModel.duration.inSeconds.toString(),
+            viewModel.passingTime.getDurationInHHMMSS,
             style: context.px24w600.copyWith(color: context.white),
           ),
           SizedBox(height: 20.h),
@@ -77,7 +77,7 @@ class TimerScreen extends StatelessWidget {
         Expanded(
           child: AppButton(
             text: viewModel.isPlayingTime ? "Tur" : "Sıfırla", // Sayarken Tur Durmuşken Sıfırla olacak
-            onPressed: () => viewModel.isPlayingTime ? viewModel.addLap() : viewModel.resetTimer(),
+            onPressed: () => viewModel.isPlayingTime ? viewModel.createLap() : viewModel.resetTimer(),
             backgroundColor: context.darkGrey,
             buttonHeight: 40.h,
           ),

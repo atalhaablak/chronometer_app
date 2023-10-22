@@ -4,6 +4,7 @@ import 'package:chronometer_app/core/init/locator.dart';
 import 'package:chronometer_app/core/utils/remote_data_source/https/_https_exports.dart';
 import 'package:chronometer_app/core/viewmodel/base_view_model.dart';
 import 'package:chronometer_app/feature/history/dto/lap_dto.dart';
+import 'package:chronometer_app/feature/history/view/history_screen.dart';
 import 'package:chronometer_app/feature/timer/data/stopwatch.dart';
 import 'package:chronometer_app/feature/timer/widget/save_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,8 +15,8 @@ class TimerViewModel extends BaseViewModel {
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  Duration duration = const Duration();
   Timer? timer;
+  int passingTime = 0;
 
   TextEditingController nameController = TextEditingController();
 
@@ -25,15 +26,11 @@ class TimerViewModel extends BaseViewModel {
   bool isActiveSaveNameButton = false;
 
   void startTimer() {
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) => addTime());
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      passingTime++;
+      refreshView();
+    });
     isPlayingTime = true;
-    refreshView();
-  }
-
-  void addTime() {
-    const addSeconds = 1;
-    final seconds = Duration(seconds: duration.inSeconds + addSeconds);
-    duration = Duration(seconds: seconds.inSeconds);
     refreshView();
   }
 
@@ -44,11 +41,11 @@ class TimerViewModel extends BaseViewModel {
     refreshView();
   }
 
-  void addLap() {
+  void createLap() {
     lapCount++;
     final lap = LapDto.createLapDto(
       lapNumber: "$lapCount",
-      lapDuration: duration.inSeconds,
+      lapDuration: passingTime,
     );
     lapList.add(lap);
     lapList = lapList.reversed.toList();
@@ -59,8 +56,8 @@ class TimerViewModel extends BaseViewModel {
     timer?.cancel();
     lapList.clear();
     lapCount = 0;
+    passingTime = 0;
     isPlayingTime = false;
-    duration = const Duration();
     refreshView();
   }
 
@@ -68,7 +65,7 @@ class TimerViewModel extends BaseViewModel {
     StopWatch historyDetailDto = StopWatch.createStopWatch(
       accountId: (_firebaseAuth.currentUser?.uid).getValueOrDefault,
       name: nameController.text,
-      totalDuration: duration.inMilliseconds,
+      totalDuration: Duration(seconds: passingTime),
       date: DateTime.now(),
       lapCount: lapCount,
       lapList: lapList,
@@ -79,7 +76,7 @@ class TimerViewModel extends BaseViewModel {
         response.then((value) async {
           if (value.isRight()) {
             resetTimer();
-            Navigator.pop(context);
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HistoryScreen()), (route) => route.isFirst);
           }
         });
       } on Exception catch (e) {
