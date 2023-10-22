@@ -37,7 +37,6 @@ class SplashScreen extends StatelessWidget {
                   style: context.px24w600.copyWith(color: context.white),
                 ),
                 SizedBox(height: 20.h),
-                viewModel.isLoading ? const Center(child: CircularProgressIndicator()) : const SizedBox(),
               ],
             ),
           );

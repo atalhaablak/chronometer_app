@@ -12,12 +12,13 @@ class LoginViewModel extends BaseViewModel {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
   bool get isEmail => emailController.text.isEmail();
   bool get isPassword => passwordController.text.isPassword();
   bool get isFormValid => isEmail && isPassword;
+  bool get isUserLogIn => _firebaseAuth.currentUser != null;
   bool showPassword = false;
-
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Future<void> loginWithEmailAndPassword(String email, String password) async {
     isLoading = true;
@@ -33,9 +34,8 @@ class LoginViewModel extends BaseViewModel {
         Navigator.pushAndRemoveUntil(GlobalContextKey.instance.currentNavigatorKey.currentContext!,
             MaterialPageRoute(builder: (context) => const HistoryScreen()), (route) => false);
       }
-    } on FirebaseAuthException {
-      showAboutDialog(
-          context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [const Text("Lütfen Bilgilerinizi Kontrol Ediniz.")]);
+    } on FirebaseAuthException catch (e) {
+      showAboutDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [Text(e.code)]);
     }
     isLoading = false;
   }
