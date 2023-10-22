@@ -155,9 +155,7 @@ class LogInScreen extends StatelessWidget {
       height: 50.h,
       child: AppButton(
         text: "Giriş Yap",
-        onPressed: () {
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HistoryScreen()), (route) => false);
-        },
+        onPressed: () => viewModel.signIn(),
         backgroundColor: viewModel.isFormValid ? context.deepPurple : context.lightPurple,
       ),
     );

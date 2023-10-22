@@ -1,14 +1,18 @@
 import 'dart:async';
-
 import 'package:chronometer_app/core/extensions/string_extension.dart';
+import 'package:chronometer_app/core/init/locator.dart';
+import 'package:chronometer_app/core/utils/remote_data_source/https/_https_exports.dart';
 import 'package:chronometer_app/core/viewmodel/base_view_model.dart';
-import 'package:chronometer_app/feature/history/dto/history_detail_dto.dart';
 import 'package:chronometer_app/feature/history/dto/lap_dto.dart';
+import 'package:chronometer_app/feature/timer/data/stopwatch.dart';
 import 'package:chronometer_app/feature/timer/widget/save_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class TimerViewModel extends BaseViewModel {
   TimerViewModel() {}
+
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Duration duration = Duration();
   Timer? timer;
@@ -40,19 +44,11 @@ class TimerViewModel extends BaseViewModel {
     refreshView();
   }
 
-  void onTappedResetOrAddLapButton(bool isPlayingTime) {
-    if (isPlayingTime) {
-      addLap();
-    } else {
-      resetTimer();
-    }
-  }
-
   void addLap() {
     lapCount++;
-    final lap = LapDto(
-      lapNumber: "$lapCount", // TODO: doğru sıralamayı alacak yapıyı kur
-      lapDuration: duration.toString(),
+    final lap = LapDto.createLapDto(
+      lapNumber: "$lapCount",
+      lapDuration: duration.inSeconds,
     );
     lapList.add(lap);
     lapList = lapList.reversed.toList();
@@ -68,15 +64,27 @@ class TimerViewModel extends BaseViewModel {
     refreshView();
   }
 
-  void saveTime() {
-    HistoryDetailDto historyDetailDto = HistoryDetailDto(
+  void saveTime(BuildContext context) {
+    StopWatch historyDetailDto = StopWatch.createStopWatch(
+      accountId: (_firebaseAuth.currentUser?.uid).getValueOrDefault,
       name: nameController.text,
-      totalCount: lapCount,
-      totalDuration: duration.toString(),
+      totalDuration: duration.inMilliseconds,
+      date: DateTime.now(),
+      lapCount: lapCount,
       lapList: lapList,
     );
     if (isActiveSaveNameButton) {
-      // TODO: FireBase Kayıt işlemi yapılacak
+      try {
+        var response = getIt<BaseRequestRepository>().post(updatedData: historyDetailDto);
+        response.then((value) async {
+          if (value.isRight()) {
+            resetTimer();
+            Navigator.pop(context);
+          }
+        });
+      } on Exception catch (e) {
+        print(e);
+      }
     }
   }
 
