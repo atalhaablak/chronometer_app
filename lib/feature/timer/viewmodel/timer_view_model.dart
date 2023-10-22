@@ -10,11 +10,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class TimerViewModel extends BaseViewModel {
-  TimerViewModel() {}
+  TimerViewModel();
 
-  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  Duration duration = Duration();
+  Duration duration = const Duration();
   Timer? timer;
 
   TextEditingController nameController = TextEditingController();
@@ -60,7 +60,7 @@ class TimerViewModel extends BaseViewModel {
     lapList.clear();
     lapCount = 0;
     isPlayingTime = false;
-    duration = Duration();
+    duration = const Duration();
     refreshView();
   }
 

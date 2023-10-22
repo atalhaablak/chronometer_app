@@ -5,6 +5,7 @@ import 'package:chronometer_app/feature/history/view/history_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashViewModel extends BaseViewModel {
+  @override
   Future<void> init() async {
     await _initiateApp();
   }

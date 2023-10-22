@@ -2,7 +2,6 @@ import 'package:chronometer_app/core/extensions/num_extension.dart';
 import 'package:chronometer_app/core/extensions/string_extension.dart';
 import 'package:chronometer_app/core/functions/r_edge_instets.dart';
 import 'package:chronometer_app/core/functions/remove_focus.dart';
-import 'package:chronometer_app/core/init/locator.dart';
 import 'package:chronometer_app/core/ui/styles/app_colors.dart';
 import 'package:chronometer_app/core/ui/styles/app_text_styles.dart';
 import 'package:chronometer_app/core/ui/widget/text_form_field.dart';
