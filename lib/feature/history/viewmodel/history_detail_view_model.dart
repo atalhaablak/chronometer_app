@@ -1,13 +1,13 @@
 import 'package:chronometer_app/core/error/failure.dart';
-import 'package:chronometer_app/core/extensions/string_extension.dart';
 import 'package:chronometer_app/core/init/locator.dart';
 import 'package:chronometer_app/core/keys/global_key.dart';
+import 'package:chronometer_app/core/ui/widget/show_error_dialog.dart';
 import 'package:chronometer_app/core/utils/remote_data_source/https/domain/entities/querys.dart';
 import 'package:chronometer_app/core/utils/remote_data_source/https/domain/repo/base_request_repository.dart';
+import 'package:chronometer_app/core/utils/route.dart';
 import 'package:chronometer_app/core/utils/route_manager/route_manager.dart';
 import 'package:chronometer_app/core/viewmodel/base_view_model.dart';
 import 'package:chronometer_app/feature/timer/data/stopwatch.dart';
-import 'package:flutter/material.dart';
 
 class HistoryDetailViewModel extends BaseViewModel {
   final String historyItemId;
@@ -30,7 +30,7 @@ class HistoryDetailViewModel extends BaseViewModel {
       ]);
       historyDetailDto = response.fold((l) => null, (r) => r.first);
     } on Failure catch (e) {
-      showAboutDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [Text(e.errorMessage.getValueOrDefault)]);
+      showAppErrorDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, content: e.errorMessage);
     }
 
     isLoading = false;
@@ -46,8 +46,9 @@ class HistoryDetailViewModel extends BaseViewModel {
         throw Exception("Silme işlemi başarısız oldu.");
       }
     } on Failure catch (e) {
-      showAboutDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [Text(e.errorMessage.getValueOrDefault)]);
+      showAppErrorDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, content: e.errorMessage);
     }
+    Go.to.pageAndRemoveUntil(historyPageRoute, predicate: (route) => route.isFirst);
     refreshView();
   }
 }

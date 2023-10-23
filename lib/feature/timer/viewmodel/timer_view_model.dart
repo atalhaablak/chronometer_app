@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:chronometer_app/core/error/failure.dart';
 import 'package:chronometer_app/core/extensions/string_extension.dart';
 import 'package:chronometer_app/core/init/locator.dart';
+import 'package:chronometer_app/core/keys/global_key.dart';
+import 'package:chronometer_app/core/ui/widget/show_error_dialog.dart';
 import 'package:chronometer_app/core/utils/remote_data_source/https/_https_exports.dart';
 import 'package:chronometer_app/core/utils/route.dart';
 import 'package:chronometer_app/core/utils/route_manager/route_manager.dart';
@@ -82,7 +84,7 @@ class TimerViewModel extends BaseViewModel {
           }
         });
       } on Failure catch (e) {
-        showAboutDialog(context: context, children: [Text(e.errorMessage.getValueOrDefault)]);
+        showAppErrorDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, content: e.errorMessage);
       }
     }
   }
