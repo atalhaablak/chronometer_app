@@ -2,13 +2,13 @@ import 'package:chronometer_app/core/error/failure.dart';
 import 'package:chronometer_app/core/extensions/string_extension.dart';
 import 'package:chronometer_app/core/init/locator.dart';
 import 'package:chronometer_app/core/keys/global_key.dart';
+import 'package:chronometer_app/core/ui/widget/show_error_dialog.dart';
 import 'package:chronometer_app/core/utils/remote_data_source/https/_https_exports.dart';
 import 'package:chronometer_app/core/utils/route.dart';
 import 'package:chronometer_app/core/utils/route_manager/route_manager.dart';
 import 'package:chronometer_app/core/viewmodel/base_view_model.dart';
 import 'package:chronometer_app/feature/timer/data/stopwatch.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class HistoryViewmodel extends BaseViewModel {
   HistoryViewmodel() {
@@ -33,7 +33,7 @@ class HistoryViewmodel extends BaseViewModel {
       );
       historyList = response.fold((l) => [], (r) => r);
     } on Failure catch (e) {
-      showAboutDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [Text(e.errorMessage.getValueOrDefault)]);
+      showAppErrorDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, content: e.errorMessage);
     }
 
     isLoading = false;
@@ -50,7 +50,7 @@ class HistoryViewmodel extends BaseViewModel {
         Go.to.maybePop();
       }
     } on Failure catch (e) {
-      showAboutDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [Text(e.errorMessage.getValueOrDefault)]);
+      showAppErrorDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, content: e.errorMessage);
     }
     refreshView();
   }
@@ -66,7 +66,7 @@ class HistoryViewmodel extends BaseViewModel {
       });
       historyList!.clear();
     } on Failure catch (e) {
-      showAboutDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [Text(e.errorMessage.getValueOrDefault)]);
+      showAppErrorDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, content: e.errorMessage);
     }
     isLoading = false;
     refreshView();

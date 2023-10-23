@@ -118,7 +118,7 @@ class HistoryDetailScreen extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 separatorBuilder: (context, index) => SizedBox(height: 10.h),
                 itemBuilder: (context, index) => Text(
-                  "#$index - ${(historyDetailDto?.lapList).getValueOrDefault[index].lapDuration.getDurationInHHMMSS}",
+                  "#${(historyDetailDto?.lapList).getValueOrDefault[index].lapNumber} - ${(historyDetailDto?.lapList).getValueOrDefault[index].lapDuration.getDurationInHHMMSS}",
                   style: context.px16w400,
                 ),
               ),
