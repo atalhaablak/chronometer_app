@@ -2,6 +2,7 @@ import 'package:chronometer_app/core/error/failure.dart';
 import 'package:chronometer_app/core/extensions/string_extension.dart';
 import 'package:chronometer_app/core/init/locator.dart';
 import 'package:chronometer_app/core/keys/global_key.dart';
+import 'package:chronometer_app/core/ui/widget/show_error_dialog.dart';
 import 'package:chronometer_app/core/utils/remote_data_source/https/_https_exports.dart';
 import 'package:chronometer_app/core/utils/route.dart';
 import 'package:chronometer_app/core/utils/route_manager/route_manager.dart';
@@ -61,7 +62,7 @@ class SignUpViewModel extends BaseViewModel {
           _registerUser();
         }
       } on FirebaseAuthException catch (e) {
-        showAboutDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [Text(e.code)]);
+        showAppErrorDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, content: e.code);
       }
       refreshView();
     }
@@ -72,7 +73,7 @@ class SignUpViewModel extends BaseViewModel {
       var response = await getIt<BaseRequestRepository>().post(updatedData: accountModel);
       response.fold((l) => null, (r) => null);
     } on Failure catch (e) {
-      showAboutDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [Text(e.errorMessage.getValueOrDefault)]);
+      showAppErrorDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, content: e.errorMessage);
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:chronometer_app/core/extensions/string_extension.dart';
 import 'package:chronometer_app/core/keys/global_key.dart';
+import 'package:chronometer_app/core/ui/widget/show_error_dialog.dart';
 import 'package:chronometer_app/core/utils/route.dart';
 import 'package:chronometer_app/core/utils/route_manager/route_manager.dart';
 import 'package:chronometer_app/core/viewmodel/base_view_model.dart';
@@ -36,7 +37,7 @@ class LoginViewModel extends BaseViewModel {
           Go.to.pageAndRemoveUntil(historyPageRoute);
         }
       } on FirebaseAuthException catch (e) {
-        showAboutDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, children: [Text(e.code)]);
+        showAppErrorDialog(context: GlobalContextKey.instance.currentNavigatorKey.currentContext!, content: e.code);
       }
       isLoading = false;
     }
